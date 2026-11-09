@@ -11,12 +11,35 @@
 #from TAD.files_listes_doublement_chainees import File
 from notation_polonaise_inverse import *
 
+operations = ['+', '-', '*', '/']
+
+def suppr(L,elt):
+    B=L.copy()
+    B.pop(elt)
+    return B
+
+
+def creation_arbre(cartons,chemin,p):
+    noeuds=[]
+    if p==3:
+        return []
+    else: 
+        for i in range (len(cartons)):
+            noeuds.append((creation_arbre(suppr(cartons,i),chemin+str(cartons[i]),p+1),chemin+str(cartons[i])))
+        noeuds.append((creation_arbre(cartons,chemin+"+",p+1),chemin+"+"))
+        noeuds.append((creation_arbre(cartons,chemin+"/",p+1),chemin+"/"))
+        noeuds.append((creation_arbre(cartons,chemin+"-",p+1),chemin+"-"))
+        noeuds.append((creation_arbre(cartons,chemin+"*",p+1),chemin+"*"))
+        return noeuds
+
 def parcours_DFS(cartons, cible) : 
     # cartons : une liste
     # cible : entier 
     nb_noeuds = 0
     meilleure_expression = []
-    
+    atteint=False
+    suiv=operations+cartons.copy
+
     return meilleure_expression, nb_noeuds
 
 def parcours_BFS(cartons, cible) : 
@@ -46,4 +69,4 @@ if __name__ == "__main__":
     parcours_DFS([3,5, 7, 9, 25, 50], 859)
     parcours_BFS([3,5, 7, 9, 25, 50], 859)
     parcours_DFS_recursif([3,5, 7, 9, 25, 50], 859)
- 
+
