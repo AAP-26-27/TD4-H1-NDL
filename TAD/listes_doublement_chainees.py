@@ -1,5 +1,3 @@
-#! /usr/bin/env python3
-
 """Listes doublement chaînées"""
 
 class CelluleDoublementChainee:

@@ -2,28 +2,33 @@
 
 """Implémentation des files à l'aide de listes doublement chainées """
 
-from listes_doublement_chainees import ListeDoublementChainee
+from TAD.listes_doublement_chainees import ListeDoublementChainee
+#from listes_doublement_chainees import ListeDoublementChainee
 
 class File:
 
     def __init__(self,n=""): 
         self.data = ListeDoublementChainee(n)
+        self.count = 0
 
-    def est_vide(self): return self.data.est_vide()
+    def est_vide(self): return self.count == 0
     
     def premier(self) : 
-        if self.data.est_vide() : raise IndexError("file vide")
+        if self.est_vide() : raise IndexError("file vide")
         return self.data.cellule_tete().valeur
     
-    def enfiler(self, x): self.data.inserer_queue(x)
+    def enfiler(self, x): 
+        self.data.inserer_queue(x)
+        self.count +=1
     
     def defiler(self):
-        if self.data.est_vide(): raise IndexError("file vide")
+        if self.est_vide(): raise IndexError("file vide")
         premier = self.data.cellule_tete().valeur
         self.data.supprimer_tete()
+        self.count -=1
         return premier
     
-    def longueur(self): return self.data.longueur()
+    def longueur(self): return self.count
     
     def afficher(self):
         self.data.afficher()
