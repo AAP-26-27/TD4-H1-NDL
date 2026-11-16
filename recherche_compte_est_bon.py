@@ -5,10 +5,10 @@
 - parcours en profondeur d’abord récursif
 - parcours en largeur d’abord itératif """
 
-#from TAD.piles_listes_python import Pile
-#from TAD.files_listes_python import File
-#from TAD.piles_listes_simplement_chainees import Pile
-#from TAD.files_listes_doublement_chainees import File
+from TAD.piles_listes_python import Pile
+from TAD.files_listes_python import File
+from TAD.piles_listes_simplement_chainees import Pile
+from TAD.files_listes_doublement_chainees import File
 from notation_polonaise_inverse import *
 
 operations = ['+', '-', '*', '/']
@@ -19,26 +19,27 @@ def suppr(L,elt):
     return B
 
 
-def creation_arbre(cartons,chemin,p):
-    noeuds=[]
-    if p==3:
-        return []
-    else: 
-        for i in range (len(cartons)):
-            noeuds.append((creation_arbre(suppr(cartons,i),chemin+str(cartons[i]),p+1),chemin+str(cartons[i])))
-        noeuds.append((creation_arbre(cartons,chemin+"+",p+1),chemin+"+"))
-        noeuds.append((creation_arbre(cartons,chemin+"/",p+1),chemin+"/"))
-        noeuds.append((creation_arbre(cartons,chemin+"-",p+1),chemin+"-"))
-        noeuds.append((creation_arbre(cartons,chemin+"*",p+1),chemin+"*"))
-        return noeuds
-
 def parcours_DFS(cartons, cible) : 
     # cartons : une liste
     # cible : entier 
     nb_noeuds = 0
     meilleure_expression = []
+    meilleur_tot=0
+    ecart_min=cible
     atteint=False
-    suiv=operations+cartons.copy
+    suiv=operations+cartons.copy()
+    iterate=0
+    while not atteint and iterate<11:
+        meilleure_expression_suiv=meilleure_expression
+        for carac in suiv:
+            a_tester=meilleure_expression + carac
+            resultat=eval_NPI_liste(a_tester, afficher = False)
+            if resultat[0] and abs(resultat[1]-cible)<ecart_min:
+                ecart_min=abs(resultat[1]-cible)
+                meilleure_expression.append(resultat[1])
+
+
+        
 
     return meilleure_expression, nb_noeuds
 
