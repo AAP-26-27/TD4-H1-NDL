@@ -18,20 +18,39 @@ def parcours_DFS(cartons, cible) :
     nb_noeuds=0
     meilleure_expression = []
     ecart_min=cible
+    taille_max=0
     possibles =[[[],cartons.copy()]]
     while len(possibles)>0:
+        if len (possibles)>taille_max:
+            taille_max=len(possibles)
         match possibles.pop():
             case [expr_a_tester,restants_a_tester]:
-                for i in range (len(restants_a_tester)):
-                    nb_noeuds+=1
-                    test=expr_a_tester + [restants_a_tester[i]]
-                    resultat=eval_NPI_liste(test, afficher = False)
-                    if resultat[0] and not resultat[1]==None:
-                        if abs(resultat[1]-cible)<ecart_min:
-                            ecart_min=abs(resultat[1]-cible)
-                            meilleure_expression=test
-                    if resultat[0]:
-                        possibles.append ([test,restants_a_tester[:i]+restants_a_tester[i+1:]])
+                test=expr_a_tester + ["*"]
+                resultat=eval_NPI_liste(test, afficher = False)
+                if resultat[0] and not resultat[1]==None:
+                    if abs(resultat[1]-cible)<ecart_min:
+                        ecart_min=abs(resultat[1]-cible)
+                        meilleure_expression=test
+                if resultat[0]:
+                    possibles.append ([test,restants_a_tester])
+                
+                test=expr_a_tester + ["+"]
+                resultat=eval_NPI_liste(test, afficher = False)
+                if resultat[0] and not resultat[1]==None:
+                    if abs(resultat[1]-cible)<ecart_min:
+                        ecart_min=abs(resultat[1]-cible)
+                        meilleure_expression=test
+                if resultat[0]:
+                    possibles.append ([test,restants_a_tester])
+
+                test=expr_a_tester + ["/"]
+                resultat=eval_NPI_liste(test, afficher = False)
+                if resultat[0] and not resultat[1]==None:
+                    if abs(resultat[1]-cible)<ecart_min:
+                        ecart_min=abs(resultat[1]-cible)
+                        meilleure_expression=test
+                if resultat[0]:
+                    possibles.append ([test,restants_a_tester])
 
                 test=expr_a_tester + ["-"]
                 resultat=eval_NPI_liste(test, afficher = False)
@@ -42,53 +61,39 @@ def parcours_DFS(cartons, cible) :
                 if resultat[0]:
                     possibles.append ([test,restants_a_tester])
                 nb_noeuds+=4
-
-                test=expr_a_tester + ["/"]
-                resultat=eval_NPI_liste(test, afficher = False)
-                if resultat[0] and not resultat[1]==None:
-                    if abs(resultat[1]-cible)<ecart_min:
-                        ecart_min=abs(resultat[1]-cible)
-                        meilleure_expression=test
-                if resultat[0]:
-                    possibles.append ([test,restants_a_tester])
-                        
-                test=expr_a_tester + ["+"]
-                resultat=eval_NPI_liste(test, afficher = False)
-                if resultat[0] and not resultat[1]==None:
-                    if abs(resultat[1]-cible)<ecart_min:
-                        ecart_min=abs(resultat[1]-cible)
-                        meilleure_expression=test
-                if resultat[0]:
-                    possibles.append ([test,restants_a_tester])
-
-                test=expr_a_tester + ["*"]
-                resultat=eval_NPI_liste(test, afficher = False)
-                if resultat[0] and not resultat[1]==None:
-                    if abs(resultat[1]-cible)<ecart_min:
-                        ecart_min=abs(resultat[1]-cible)
-                        meilleure_expression=test
-                if resultat[0]:
-                    possibles.append ([test,restants_a_tester])
-                print(meilleure_expression)
+                
+                for i in reversed(range (len(restants_a_tester))):
+                    nb_noeuds+=1
+                    test=expr_a_tester + [restants_a_tester[i]]
+                    resultat=eval_NPI_liste(test, afficher = False)
+                    if resultat[0] and not resultat[1]==None:
+                        if abs(resultat[1]-cible)<ecart_min:
+                            ecart_min=abs(resultat[1]-cible)
+                            meilleure_expression=test
+                    if resultat[0]:
+                        possibles.append ([test,restants_a_tester[:i]+restants_a_tester[i+1:]])
                 if ecart_min==0:
-                    print ("Cible atteinte",nb_noeuds)
+                    print ("Cible atteinte",nb_noeuds,meilleure_expression,taille_max)
                     return (meilleure_expression,nb_noeuds)
-    print(meilleure_expression,nb_noeuds)
+    print(meilleure_expression,nb_noeuds,taille_max)
     return meilleure_expression,nb_noeuds
 
 def parcours_BFS(cartons, cible) : 
     # cartons : une liste
     # cible : entier 
     nb_noeuds = 0
+    taille_max=0
     meilleure_expression = []
     ecart_min=cible
     possibles =File()
     possibles.enfiler([[],cartons.copy()])
     while possibles.longueur()>0:
+        if possibles.longueur()>taille_max:
+            taille_max=possibles.longueur()
         match possibles.defiler():
             case [expr_a_tester,restants_a_tester]:
                 for i in range (len(restants_a_tester)):
-                    nb_noeuds
+                    nb_noeuds+=1
                     test=expr_a_tester + [restants_a_tester[i]]
                     resultat=eval_NPI_liste(test, afficher = False)
                     if resultat[0] and not resultat[1]==None:
@@ -134,21 +139,22 @@ def parcours_BFS(cartons, cible) :
                         meilleure_expression=test
                 if resultat[0]:
                     possibles.enfiler([test,restants_a_tester])
-                print(meilleure_expression)
                 if ecart_min==0:
-                    print ("Cible atteinte",nb_noeuds)
+                    print ("Cible atteinte",nb_noeuds,meilleure_expression,taille_max)
                     return meilleure_expression,nb_noeuds
-    print(meilleure_expression,nb_noeuds)
+    print(meilleure_expression,nb_noeudstaille_max)
     return meilleure_expression,nb_noeuds
 
 
 
 def parcours_DFS_recursif(cartons, cible) :
+    taille_max=0
     meilleure_expression = []
     nb_noeuds = 0
     ecart_min=cible
     def parcours_DFSR_aux(choisis, restants) :
         nonlocal meilleure_expression
+        nonlocal taille_max
         nonlocal nb_noeuds
         nonlocal cible
         nonlocal ecart_min
@@ -203,14 +209,13 @@ def parcours_DFS_recursif(cartons, cible) :
                         meilleure_expression=test
                 if resultat[0]:
                     parcours_DFSR_aux(test,restants_a_tester)
-                print(meilleure_expression)
     parcours_DFSR_aux([],cartons)
-    print(meilleure_expression,nb_noeuds)
+    print(meilleure_expression,nb_noeuds,taille_max)
     return meilleure_expression,nb_noeuds
 
 
 if __name__ == "__main__":
-    #parcours_DFS([3, 5, 7, 9, 25, 50], 859)
-    #parcours_BFS([3,5, 7, 9, 25, 50], 859)
+    parcours_DFS([3, 5, 7, 9, 25, 50], 859)
+    parcours_BFS([3,5, 7, 9, 25, 50], 859)
     parcours_DFS_recursif([3,5, 7, 9, 25, 50], 859)
 
